@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import Historique from "./pages/Historique";
 import Profils from "./pages/Profils";
 import AjouterGarde from "./pages/AjouterGarde";
+import ModifierGarde from "./pages/ModifierGarde";
+import ModifierProfil from "./pages/ModifierProfil";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +24,8 @@ const App = () => (
           <Route path="/historique" element={<Historique />} />
           <Route path="/profils" element={<Profils />} />
           <Route path="/ajouter" element={<AjouterGarde />} />
+          <Route path="/modifier-garde/:id" element={<ModifierGarde />} />
+          <Route path="/modifier-profil/:id" element={<ModifierProfil />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
