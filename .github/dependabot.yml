@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"  # chemin du fichier package.json
+    schedule:
+      interval: "daily"  # daily, weekly ou monthly
