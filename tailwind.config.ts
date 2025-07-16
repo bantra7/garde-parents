@@ -61,7 +61,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				childcare: {
+					cream: 'hsl(var(--childcare-cream))',
+					warm: 'hsl(var(--childcare-warm))'
+				},
+				'text-primary': 'hsl(var(--text-primary))',
+				'text-secondary': 'hsl(var(--text-secondary))',
+				'nav-active': 'hsl(var(--nav-active))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
