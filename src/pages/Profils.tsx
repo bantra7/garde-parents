@@ -4,19 +4,37 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { User, Phone, MapPin, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useDatabase } from "@/hooks/useDatabase";
 import leoAvatar from "@/assets/leo-avatar.png";
+
+interface Profile {
+  id: string;
+  name: string;
+  role: string;
+  details: string;
+  avatar?: string;
+  phone?: string;
+  editable: boolean;
+}
 
 const Profils = () => {
   const navigate = useNavigate();
-  const profiles = [
-    {
-      id: "leo",
-      name: "Léo",
-      role: "Enfant",
-      details: "1 an • Né le 15 juin 2023",
-      avatar: leoAvatar,
-      editable: true
-    },
+  const { getEnfants, isReady } = useDatabase();
+  const [enfants, setEnfants] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchEnfants = async () => {
+      if (isReady) {
+        const enfantsData = await getEnfants();
+        setEnfants(enfantsData);
+      }
+    };
+    fetchEnfants();
+  }, [isReady, getEnfants]);
+
+  // Static data for grandparents
+  const staticProfiles: Profile[] = [
     {
       id: "meme",
       name: "Mémé",
@@ -33,6 +51,19 @@ const Profils = () => {
       phone: "06 87 65 43 21",
       editable: true
     }
+  ];
+
+  // Combine dynamic enfants with static profiles
+  const profiles: Profile[] = [
+    ...enfants.map(enfant => ({
+      id: `enfant-${enfant.id}`,
+      name: enfant.nom,
+      role: "Enfant",
+      details: `${enfant.age} an${enfant.age > 1 ? 's' : ''}`,
+      avatar: enfant.nom === "Léo" ? leoAvatar : undefined,
+      editable: true
+    })),
+    ...staticProfiles
   ];
 
   return (

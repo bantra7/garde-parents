@@ -14,6 +14,12 @@ interface GardeResult {
   date: string;
 }
 
+interface Enfant {
+  id: number;
+  nom: string;
+  age: number;
+}
+
 export const useDatabase = () => {
   const [connection, setConnection] = useState<DatabaseConnection>({
     db: null,
@@ -127,6 +133,18 @@ export const useDatabase = () => {
     }
   };
 
+  const getEnfants = async (): Promise<Enfant[]> => {
+    if (!connection.db) return [];
+    
+    try {
+      const result = await connection.db.query('SELECT * FROM enfants ORDER BY nom');
+      return result.values as Enfant[] || [];
+    } catch (error) {
+      console.error('Error fetching enfants:', error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     initializeDatabase();
   }, []);
@@ -134,6 +152,7 @@ export const useDatabase = () => {
   return {
     ...connection,
     initializeDatabase,
-    queryGardesWithJoin: () => connection.db ? queryGardesWithJoin(connection.db) : null
+    queryGardesWithJoin: () => connection.db ? queryGardesWithJoin(connection.db) : null,
+    getEnfants
   };
 };
