@@ -17,12 +17,9 @@
     "android:run": "npm run build && npx cap sync android && npx cap open android"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@capacitor/android": "^7.4.2",
     "@capacitor/cli": "^7.4.2",
-=======
     "@capacitor-community/sqlite": "^7.0.1",
->>>>>>> 509c211140101a68b2204c709eb1f5354f4027e4
     "@capacitor/core": "^7.4.2",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
