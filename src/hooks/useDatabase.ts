@@ -18,6 +18,15 @@ interface Enfant {
   id: number;
   nom: string;
   age: number;
+  photo_url?: string;
+}
+
+interface GrandParent {
+  id: number;
+  nom: string;
+  lieu: string;
+  telephone?: string;
+  role: 'grand-mere' | 'grand-pere';
 }
 
 export const useDatabase = () => {
@@ -62,12 +71,15 @@ export const useDatabase = () => {
       `CREATE TABLE IF NOT EXISTS enfants (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nom TEXT NOT NULL,
-        age INTEGER NOT NULL
+        age INTEGER NOT NULL,
+        photo_url TEXT
       )`,
       `CREATE TABLE IF NOT EXISTS grands_parents (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nom TEXT NOT NULL,
-        lieu TEXT NOT NULL
+        lieu TEXT NOT NULL,
+        telephone TEXT,
+        role TEXT NOT NULL CHECK (role IN ('grand-mere', 'grand-pere'))
       )`,
       `CREATE TABLE IF NOT EXISTS gardes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,8 +108,9 @@ export const useDatabase = () => {
       }
 
       // Insert example data
-      await db.run('INSERT INTO enfants (nom, age) VALUES (?, ?)', ['Marie', 4]);
-      await db.run('INSERT INTO grands_parents (nom, lieu) VALUES (?, ?)', ['Jean', 'Paris']);
+      await db.run('INSERT INTO enfants (nom, age, photo_url) VALUES (?, ?, ?)', ['Marie', 4, '/src/assets/leo-avatar.png']);
+      await db.run('INSERT INTO grands_parents (nom, lieu, telephone, role) VALUES (?, ?, ?, ?)', ['Jean', 'Paris', '06 12 34 56 78', 'grand-pere']);
+      await db.run('INSERT INTO grands_parents (nom, lieu, telephone, role) VALUES (?, ?, ?, ?)', ['Marie', 'Lyon', '06 87 65 43 21', 'grand-mere']);
       await db.run('INSERT INTO gardes (enfant_id, grand_parent_id, date) VALUES (?, ?, ?)', [1, 1, '2025-07-16']);
       
       console.log('Example data inserted successfully');
@@ -145,6 +158,38 @@ export const useDatabase = () => {
     }
   };
 
+  const getGrandsParents = async (): Promise<GrandParent[]> => {
+    if (!connection.db) return [];
+    
+    try {
+      const result = await connection.db.query('SELECT * FROM grands_parents ORDER BY nom');
+      return result.values as GrandParent[] || [];
+    } catch (error) {
+      console.error('Error fetching grands parents:', error);
+      return [];
+    }
+  };
+
+  const addEnfant = async (nom: string, age: number, photo_url?: string): Promise<void> => {
+    if (!connection.db) return;
+    
+    try {
+      await connection.db.run('INSERT INTO enfants (nom, age, photo_url) VALUES (?, ?, ?)', [nom, age, photo_url || null]);
+    } catch (error) {
+      console.error('Error adding enfant:', error);
+    }
+  };
+
+  const addGrandParent = async (nom: string, lieu: string, telephone?: string, role?: 'grand-mere' | 'grand-pere'): Promise<void> => {
+    if (!connection.db) return;
+    
+    try {
+      await connection.db.run('INSERT INTO grands_parents (nom, lieu, telephone, role) VALUES (?, ?, ?, ?)', [nom, lieu, telephone || null, role || 'grand-pere']);
+    } catch (error) {
+      console.error('Error adding grand parent:', error);
+    }
+  };
+
   useEffect(() => {
     initializeDatabase();
   }, []);
@@ -153,6 +198,9 @@ export const useDatabase = () => {
     ...connection,
     initializeDatabase,
     queryGardesWithJoin: () => connection.db ? queryGardesWithJoin(connection.db) : null,
-    getEnfants
+    getEnfants,
+    getGrandsParents,
+    addEnfant,
+    addGrandParent
   };
 };
