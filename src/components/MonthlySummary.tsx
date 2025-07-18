@@ -1,26 +1,23 @@
 interface MonthlySummaryProps {
-  grandmaName: string;
-  grandmaDays: number;
-  grandpaName: string;
-  grandpaDays: number;
+  grandsParents: { name: string; days: number }[];
+  startDate: Date;
+  endDate: Date;
 }
 
-const MonthlySummary = ({ grandmaName, grandmaDays, grandpaName, grandpaDays }: MonthlySummaryProps) => {
+const MonthlySummary = ({ grandsParents, startDate, endDate }: MonthlySummaryProps) => {
+  // La logique d'affichage reste inchangée ici, mais on pourra utiliser startDate et endDate dans le futur
   return (
-    <div className="px-4 py-6">
-      <h3 className="text-lg font-medium text-primary mb-4">Résumé du mois</h3>
-      
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
-          <span className="text-primary">{grandmaName}</span>
-          <span className="text-text-secondary">{grandmaDays} jours</span>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <span className="text-primary">{grandpaName}</span>
-          <span className="text-text-secondary">{grandpaDays} jours</span>
-        </div>
-      </div>
+    <div className="w-full flex justify-center px-4">
+      <table className="min-w-[220px] max-w-sm w-full border-separate border-spacing-0 mx-auto">
+        <tbody>
+          {grandsParents.map((gp, idx) => (
+            <tr key={gp.name + idx} className="border-b border-border last:border-b-0">
+              <td className="py-2 pr-4 text-primary text-left whitespace-nowrap">{gp.name}</td>
+              <td className="py-2 pl-4 text-text-secondary text-right w-24 whitespace-nowrap">{gp.days} jours</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

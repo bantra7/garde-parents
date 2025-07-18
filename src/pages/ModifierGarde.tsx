@@ -72,6 +72,7 @@ const ModifierGarde = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      <div className="h-3 md:h-0" />
       <ChildcareHeader title="Modifier la garde" />
       
       <div className="px-4 py-6">

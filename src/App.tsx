@@ -11,6 +11,8 @@ import AjouterGarde from "./pages/AjouterGarde";
 import ModifierGarde from "./pages/ModifierGarde";
 import ModifierProfil from "./pages/ModifierProfil";
 import NotFound from "./pages/NotFound";
+import AjouterEnfant from "./pages/AjouterEnfant";
+import AjouterGrandParent from "./pages/AjouterGrandParent";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +39,8 @@ const App = () => (
           <Route path="/historique" element={<Historique />} />
           <Route path="/profils" element={<Profils />} />
           <Route path="/ajouter" element={<AjouterGarde />} />
+          <Route path="/ajouter-enfant" element={<AjouterEnfant />} />
+          <Route path="/ajouter-grand-parent" element={<AjouterGrandParent />} />
           <Route path="/modifier-garde/:id" element={<ModifierGarde />} />
           <Route path="/modifier-profil/:id" element={<ModifierProfil />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
